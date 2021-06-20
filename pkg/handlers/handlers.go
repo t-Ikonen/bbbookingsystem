@@ -38,7 +38,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("IP on home sivulla ", ipAddr)
 	//send data to template
-	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, "home.page.tmpl.html", &models.TemplateData{})
 }
 
 // About func handles About page
@@ -50,7 +50,7 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap["remote_ip"] = remoteIp
 	fmt.Println("IP on About sivulla ", remoteIp)
 
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
+	render.RenderTemplate(w, "about.page.tmpl.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 }

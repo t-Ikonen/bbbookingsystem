@@ -54,7 +54,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateDa
 //CreateTemplateCache creates template cache
 func CreateTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
-	pages, err := filepath.Glob("./templates/*.page.tmpl")
+	pages, err := filepath.Glob("./templates/*.page.tmpl.html")
 	if err != nil {
 		return myCache, err
 	}
@@ -65,16 +65,16 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 
 		tmplSet, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
-			fmt.Println("Template setin luonti")
+			//fmt.Println("Template setin luonti")
 			return myCache, err
 		}
-		matches, err := filepath.Glob("./templates/*.layout.tmpl")
+		matches, err := filepath.Glob("./templates/*.layout.tmpl.html")
 		if err != nil {
 			fmt.Println("Matches")
 			return myCache, err
 		}
 		if len(matches) > 0 {
-			tmplSet, err = tmplSet.ParseGlob("./templates/*.layout.tmpl")
+			tmplSet, err = tmplSet.ParseGlob("./templates/*.layout.tmpl.html")
 			if err != nil {
 
 				return myCache, err

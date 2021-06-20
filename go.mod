@@ -1,4 +1,4 @@
-module bbbookingsystem
+module github.com/t-Ikonen/bbbookingsystem
 
 go 1.16
 
