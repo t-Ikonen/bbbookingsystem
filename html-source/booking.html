@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-bs4.min.css">
+    
 
         <style>
           .my-footer {
@@ -21,6 +23,9 @@
           max-width: 60%;
         }
         
+        .datepicker {
+          z-index: 10000;
+        }
         </style>  
     </head>
 <body>
@@ -60,12 +65,13 @@
   </div>    
 </nav>
 
-<div class="container" >
+<div class="container">
   <div class="row">
-    <div class="col">
-      <div class="col-md-3"></div>
-      <img src="static/images/laama.jpg" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="cabin">  
-    </div>
+    
+      <div class="col-md-10">
+        <img src="static/images/laama.jpg" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="laama">  
+      </div>      
+    
   </div>
 </div>
 
@@ -74,57 +80,52 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3"></div>
-    <div class="col-md-6">
+      <div class="col-md-6">
+        <h2 class="text mt-5">Search availabilty</h2>
+          <form action="booking.html" method="get" novalidate class="needs-validation">
 
-      <h2 class="text mt-5">Search availabilty</h2>
-    </div>  
-  </div>   
-  <form action="booking.html" method="get" novalidate class="needs-validation">
-
-  <div class="row">
-
-    <div class="col-md-3"></div>
-      <div class="col-md-3">
-          <div class="form-group mt-2 mb-3">
-            <label for="startingDate" class="form-label">Starting date</label>
-            <input required type="date" class="form-control" id="starting_Date" name="starting_date" aria-describedby="startDatelHelp">
-              <div class="invalid-feedback">
-                Enter valid date.
+            <div class="row">
+              <div  class="col">
+                <div class="row" id="datePicker">
+                  <div class="col-md-6">
+                    <input required class="form-control" type="text" name="startDate" id="startDate" placeholder="Arrival">
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <input required class="form-control" type="text" name="endtDate" id="endDate" placeholder="Departure">
+                  </div>
+                </div>
               </div>
-            <div id="startDatehelp" class="form-text">Format YYYY-MM-DD.</div>
-          </div>
-      </div>
-          
-      <div class="col-md-3">
-        <div class="form-group mb-3 mt-2">
-          <label for="startingDate" class="form-label">Ending date</label>
-          <input required type="date" class="form-control" id="endingDate" name="ending_date" aria-describedby="endingDatelHelp">
-          <div class="invalid-feedback">
-            Enter valid date.
-          </div>
-          <div id="endingDatehelp" class="form-text">Format YYYY-MM-DD. </div>
+              <hr>
+            </div>
+          </form>
+      </div>            
+  </div> 
+ 
+  <div class="row">
+    <div class="col-md-3"></div>
+      <div class="col-md-6">
+       <div class="mb-4">
+          <input type="checkbox" class="form-check-input" id="dogPicCheck" name="dogPicCheck">
+          <label class="form-check-label" for="exampleCheck1">Show a cute dog photo in search results<label>
         </div>
       </div>
-
+      
   </div>
-
-  <div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-
-      <div class="mb-2 form-check">
-        <input type="checkbox" class="form-check-input" id="dogPicCheck" name="dogPicCheck">
-        <label class="form-check-label" for="exampleCheck1">Show a cute dog photo in search results</label>
-      </div>
-    </div>  
-  </div>  
-
-  <div class="row">
-    <div class="col text-center">
-      <button type="submit" class="btn btn-primary">Search</button>
-    </div> 
+    
+   
+    <div class="row">
+      <div class="col text-center">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
   </div>
-</form>
+    
+  <hr>
+      <div class="row">
+        <div class="col text-center">
+          <button type="testaa" id="testaa" class="btn btn-primary">testaa</button>
+        </div>
+      </div>   
+       
 </div>
       
    
@@ -147,30 +148,164 @@
 	
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/js/datepicker-full.min.js"></script>
+<script src="https://unpkg.com/notie"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-  console.log("from the depths of JS");
+  
+let attention = Prompt()
 
-  // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
-  'use strict'
+document.getElementById("testaa").addEventListener("click", function (){
+  //notieAlert("minun oma viesti", "neutral")
+  //swalAlert("Hupsista keikkaa", "<b>Nyt meni ojan puolelelle</b>", "error", "Ei se haittaa..." )
+  let html = `
+        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+            <div class="form-row">
+                <div class="col">
+                    <div class="row" id="datePicker-modal">
+                        <div class="col">
+                            <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                        </div>
+                        <div class="col">
+                            <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                        </div>
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  let forms = document.querySelectorAll('.needs-validation')
+                    </div>
+                </div>
+            </div>
+        </form>
+        `;
+        attention.custom({
+            title: 'Choose your dates',
+            msg: html,
+        });
+    })
 
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
+const elem = document.getElementById('datePicker');
+const rangepicker = new DateRangePicker(elem, {
+  format: "dd.mm.yyyy", 
+}); 
+
+function notieAlert(msg,type) {
+notie.alert ({
+  type: type, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+  text: msg,
+ })
+}
+
+function swalAlert (title, html, icon, buttonText) {
+Swal.fire({
+  title: title,
+  html: html,
+  icon: icon,
+  confirmButtonText: buttonText,
+})
+}
+
+function Prompt() {
+        let toast = function (c) {
+            const{
+                msg = "",
+                icon = 'success',
+                position = 'top-end',
+
+            } = c;
+
+            const Toast = Swal.mixin({
+                toast: true,
+                title: msg,
+                position: position,
+                icon: icon,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({})
         }
 
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()
+        let success = function (c) {
+            const {
+                msg = "",
+                title = "",
+                footer = "",
+            } = c;
+
+            Swal.fire({
+                icon: 'success',
+                title: title,
+                text: msg,
+                footer: footer,
+            })
+
+        }
+
+        let error = function (c) {
+            const {
+                msg = "",
+                title = "",
+                footer = "",
+            } = c;
+
+            Swal.fire({
+                icon: 'error',
+                title: title,
+                text: msg,
+                footer: footer,
+            })
+
+        }
+
+        async function custom(c) {
+            const {
+                msg = "",
+                title = "",
+            } = c;
+
+            const { value: formValues } = await Swal.fire({
+                title: title,
+                html: msg,
+                backdrop: false,
+                focusConfirm: false,
+                showCancelButton: true,
+                willOpen: () => {
+                    const elem = document.getElementById("datePicker-modal");
+                    const rp = new DateRangePicker(elem, {
+                        format: 'dd-mm-yyyy',
+                        showOnFocus: true,
+                    })
+                },
+                didOpen: () => {
+                    document.getElementById("start").removeAttribute("disabled");
+                    document.getElementById("end").removeAttribute("disabled");
+                },
+                preConfirm: () => {
+                    return [
+                        document.getElementById('start').value,
+                        document.getElementById('end').value
+                    ]
+                }
+            })
+
+            if (formValues) {
+                Swal.fire(JSON.stringify(formValues))
+            }
+        }
+
+        return {
+            toast: toast,
+            success: success,
+            error: error,
+            custom: custom,
+        }
+    }
+
+
 </script>
 
 </body>
