@@ -1,0 +1,69 @@
+{{template "base" .}}
+{{define "content"}}
+<div class="container">
+    <div class="row">
+      <div class="col">
+          <div class="col" >
+            <div class="col" >
+              <img src="static/images/laama.jpg" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="laama">  
+            </div>
+          </div>
+        </div>      
+      </div>
+  </div>
+  
+  
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <h2 class="text mt-5">Search availabilty</h2>
+            <form action="booking.html" method="get" novalidate class="needs-validation">
+  
+              <div class="row">
+                <div  class="col">
+                  <div class="row" id="datePicker">
+                    <div class="col-md-6">
+                      <input required class="form-control" type="text" name="startDate" id="startDate" placeholder="Arrival">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <input required class="form-control" type="text" name="endtDate" id="endDate" placeholder="Departure">
+                    </div>
+                  </div>
+                </div>
+                <hr>
+              </div>
+            </form>
+        </div>            
+    </div> 
+   
+    <div class="row">
+      <div class="col-md-3"></div>
+        <div class="col-md-6">
+         <div class="mb-4">
+            <input type="checkbox" class="form-check-input" id="dogPicCheck" name="dogPicCheck">
+            <label class="form-check-label" for="exampleCheck1">Show a cute dog photo in search results<label>
+          </div>
+        </div>
+        
+    </div>
+      
+     
+      <div class="row">
+        <div class="col text-center">
+          <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+      
+    <hr>
+        <div class="row">
+          <div class="col text-center">
+            <button type="testaa" id="testaa" class="btn btn-primary">testaa</button>
+          </div>
+        </div>   
+         
+  </div>
+
+
+{{end}}

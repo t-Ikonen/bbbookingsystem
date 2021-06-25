@@ -1,15 +1,60 @@
 {{template "base" .}}
 
 {{define "content"}}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <header>This header paskaa</header>
-            <p>Paragraph starts here telling nothing at all</p>
-            <p>Paragraph 2 </p>
-            
-            <p>Testi</p>
-        </div>
+<div id="main-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#main-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#main-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#main-carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="/static/images/pelto.jpg" class="d-block w-100" alt="field">
+      <div class="carousel-caption d-none d-md-block">
+        <h4>Fields of sorrow</h4>
+        <p>Where the night crawls in midday</p>
+      </div>
     </div>
+    <div class="carousel-item">
+      <img src="/static/images/jaapeite.jpg" class="d-block w-100" alt="ice">
+      <div class="carousel-caption d-none d-md-block">
+        <h4>Endless ice</h4>
+        <p>Take a walk across the lake</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="/static/images/mokki.jpg" class="d-block w-100" alt="cabin">
+      <div class="carousel-caption d-none d-md-block">
+        <h4>Cabin fewer</h4>
+        <p>Place to rest your mind</p>
+      </div>
+    </div>
+  </div>
 </div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 class="text-center mt-5">Welcome to Frostbitten B&B</h1>
+      <p>
+        Endless snow and darkness, makes a vacation to remember.
+      <br>
+        Endless snow and darkness, makes a vacation to remember.
+        Endless snow and darkness, makes a vacation to remember.
+        Endless snow and darkness, makes a vacation to remember.
+      <br>
+        Endless snow and darkness, makes a vacation to remember.
+        Endless snow and darkness, makes a vacation to remember.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row"> 
+  <div class="col text-center">
+      <a href="/booking" class="btn btn-success" >Make Reservation Now</a>
+  </div>
+</div>
+
 {{end}}

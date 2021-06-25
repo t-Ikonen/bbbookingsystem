@@ -54,3 +54,33 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 		StringMap: stringMap,
 	})
 }
+
+//Booking to render Booking page
+func (m *Repository) Booking(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "booking.page.tmpl.html", &models.TemplateData{})
+}
+
+//Reservation to render Reservation page
+func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "reservation.page.tmpl.html", &models.TemplateData{})
+}
+
+//Contact to render contact page
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "contact.page.tmpl.html", &models.TemplateData{})
+}
+
+//Northernlights to render northernlights page
+func (m *Repository) Northernlights(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "northernlights.page.tmpl.html", &models.TemplateData{})
+}
+
+//Frostsuite to render Frostsuite page
+func (m *Repository) Frostsuite(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "frostsuite.page.tmpl.html", &models.TemplateData{})
+}
+
+//Snowsuite renders Snowsuite page
+func (m *Repository) Snowsuite(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "snowsuite.page.tmpl.html", &models.TemplateData{})
+}
