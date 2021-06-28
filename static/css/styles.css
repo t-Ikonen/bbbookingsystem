@@ -15,6 +15,11 @@
     z-index: 10000;
   }
 
+  .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    width: 50%;
+}
+
+
  .room-image {
   max-width: 60%;
 }

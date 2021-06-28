@@ -1,17 +1,18 @@
 {{define "base"}}
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-bs4.min.css">
-        <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
-    </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-bs4.min.css">
+   <!--  <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+</head>
+
 <body>
     
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -76,40 +77,8 @@
 {{end}}
 
 <script>
-  
+
     let attention = Prompt()
-
-    document.getElementById("testaa").addEventListener("click", function (){
-    //notieAlert("minun oma viesti", "neutral")
-    //swalAlert("Hupsista keikkaa", "<b>Nyt meni ojan puolelelle</b>", "error", "Ei se haittaa..." )
-    let html = `
-            <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
-                <div class="form-row">
-                    <div class="col">
-                        <div class="row" id="datePicker-modal">
-                            <div class="col">
-                                <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
-                            </div>
-                            <div class="col">
-                                <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </form>
-            `;
-            attention.custom({
-                title: 'Choose your dates',
-                msg: html,
-            });
-        })
-
-    const elem = document.getElementById('datePicker');
-    const rangepicker = new DateRangePicker(elem, {
-    format: "dd.mm.yyyy", 
-    }); 
-
     function notieAlert(msg,type) {
     notie.alert ({
     type: type, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']

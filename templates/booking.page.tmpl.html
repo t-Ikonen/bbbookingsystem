@@ -19,8 +19,8 @@
       <div class="col-md-3"></div>
         <div class="col-md-6">
           <h2 class="text mt-5">Search availabilty</h2>
-            <form action="booking.html" method="get" novalidate class="needs-validation">
-  
+            <form action="/booking" method="post" novalidate class="needs-validation">
+              <input type="hidden" name="csrf_token" value="{{.CSFRToken}}">
               <div class="row">
                 <div  class="col">
                   <div class="row" id="datePicker">
@@ -28,11 +28,12 @@
                       <input required class="form-control" type="text" name="startDate" id="startDate" placeholder="Arrival">
                     </div>
                     <div class="col-md-6 mb-4">
-                      <input required class="form-control" type="text" name="endtDate" id="endDate" placeholder="Departure">
+                      <input required class="form-control" type="text" name="endDate" id="endDate" placeholder="Departure">
                     </div>
                   </div>
                 </div>
                 <hr>
+                <button type="submit" class="btn btn-primary">Search</button>
               </div>
             </form>
         </div>            
@@ -52,7 +53,7 @@
      
       <div class="row">
         <div class="col text-center">
-          <button type="submit" class="btn btn-primary">Search</button>
+          <button type="submit" class="btn btn-primary">Not working Search</button>
       </div>
     </div>
       
@@ -64,6 +65,15 @@
         </div>   
          
   </div>
+{{end}}
 
+
+{{define "js"}}
+<script>
+  const elem = document.getElementById('datePicker');
+  const rangepicker = new DateRangePicker(elem, {
+  format: "dd.mm.yyyy", 
+  }); 
+</script>
 
 {{end}}

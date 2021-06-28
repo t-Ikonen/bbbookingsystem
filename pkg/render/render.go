@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/justinas/nosurf"
 	"github.com/t-Ikonen/bbbookingsystem/pkg/config"
 	"github.com/t-Ikonen/bbbookingsystem/pkg/models"
 )
@@ -16,8 +17,8 @@ var functions = template.FuncMap{}
 
 var appConfig *config.AppConfig
 
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
-
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSFRToken = nosurf.Token(r)
 	return td
 }
 
@@ -26,7 +27,7 @@ func NewTemplates(a *config.AppConfig) {
 	appConfig = a
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateData, r *http.Request) {
 	var tmplCache map[string]*template.Template
 
 	if appConfig.UseCache {
@@ -41,7 +42,8 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateDa
 	}
 
 	buf := new(bytes.Buffer)
-	tmplD = AddDefaultData(tmplD)
+
+	tmplD = AddDefaultData(tmplD, r)
 
 	_ = t.Execute(buf, tmplD)
 	_, err := buf.WriteTo(w)

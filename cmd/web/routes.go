@@ -22,6 +22,7 @@ func Routes(app *config.AppConfig) http.Handler {
 	mux.Get("/contact", handlers.Repo.Contact)
 	mux.Get("/snowsuite", handlers.Repo.Snowsuite)
 	mux.Get("/booking", handlers.Repo.Booking)
+	mux.Post("/booking", handlers.Repo.PostBooking)
 	mux.Get("/frostsuite", handlers.Repo.Frostsuite)
 	mux.Get("/northernlights", handlers.Repo.Northernlights)
 	mux.Get("/reservation", handlers.Repo.Reservation)

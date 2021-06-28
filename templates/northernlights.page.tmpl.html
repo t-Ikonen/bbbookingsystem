@@ -4,7 +4,7 @@
 <div class="container" >
   <div class="row">
     <div class="col">
-      <img src="/static/images/cabin.jpg" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="cabin">  
+      <img src="/static/images/cabin.jpg" class="img-fluid img-thumbnail mx-auto  d-block room-image" alt="cabin">  
     </div>
   </div>
 </div>
@@ -14,21 +14,53 @@
       <div class="col">
         <h1 class="text-center mt-5">Northern Lights Cabin</h1>
         <p>
-          Northern Lights Cabin
-          - 2 bedrooms
-          - 2 water closets
-        <br>
-          
+          <ul>
+            <h4>Northern Lights Cabin</h4>
+            <li>2 bedrooms</li>
+            <li>2 water closets</li>
+            <li>four meat hooks</li>
+            <br>
+            <li>shared outdoor pool</li>
+        </ul>
         </p>
      </div>
     </div>
   
     <div class="row"> 
       <div class="col text-center">
-          <a href="booking.html" class="btn btn-success" >Reserve Northern Lights Cabin</a>
+          <a id="check-availability-button" href="#!" class="btn btn-success" >Reserve Northern Lights Cabin</a>
       </div>
     </div>
   </div>
 
+{{end}}
 
+{{define "js"}}
+<script>
+  
+
+document.getElementById("check-availability-button").addEventListener("click", function (){
+  let html = `
+      <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+          <div class="form-row">
+              <div class="col">
+                  <div class="row" id="datePicker-modal">
+                      <div class="col">
+                          <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                      </div>
+                      <div class="col">
+                          <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+      </form>
+      `;
+      attention.custom({
+          title: 'Choose your dates',
+          msg: html,
+      });
+})
+</script>
 {{end}}
