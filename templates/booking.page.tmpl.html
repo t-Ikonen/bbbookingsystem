@@ -1,16 +1,16 @@
 {{template "base" .}}
 {{define "content"}}
 <div class="container">
-    <div class="row">
-      <div class="col">
-          <div class="col" >
-            <div class="col" >
-              <img src="static/images/laama.jpg" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="laama">  
-            </div>
-          </div>
-        </div>      
+  <div class="row">
+    <div class="col">
+      <div class="col" >
+        <div class="col" >
+          <img src="static/images/laama.jpg" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="laama">  
+        </div>
       </div>
+    </div>      
   </div>
+</div>
   
   
   
@@ -20,7 +20,7 @@
         <div class="col-md-6">
           <h2 class="text mt-5">Search availabilty</h2>
             <form action="/booking" method="post" novalidate class="needs-validation">
-              <input type="hidden" name="csrf_token" value="{{.CSFRToken}}">
+              <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
               <div class="row">
                 <div  class="col">
                   <div class="row" id="datePicker">

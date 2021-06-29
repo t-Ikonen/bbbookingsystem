@@ -2,7 +2,9 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/t-Ikonen/bbbookingsystem/pkg/config"
@@ -66,6 +68,26 @@ func (m *Repository) PostBooking(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("startDate")
 	w.Write([]byte(fmt.Sprintf("Posting start: %s and end is %s", start, end)))
 	//w.Write([]byte("postiiiiing"))
+}
+
+type jsonResponse struct {
+	OK      bool   `json:"ok"`
+	Message string `jsnon:"message"`
+}
+
+//BookingJSON to request availability JSON format
+func (m *Repository) BookingJSON(w http.ResponseWriter, r *http.Request) {
+	resp := jsonResponse{
+		OK:      true,
+		Message: "Not Available",
+	}
+	out, err := json.MarshalIndent(resp, "", "     ")
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(string(out))
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
 
 //Reservation to render Reservation page
