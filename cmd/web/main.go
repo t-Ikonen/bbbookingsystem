@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/t-Ikonen/bbbookingsystem/pkg/config"
-	"github.com/t-Ikonen/bbbookingsystem/pkg/handlers"
-	"github.com/t-Ikonen/bbbookingsystem/pkg/render"
+	"github.com/t-Ikonen/bbbookingsystem/internal/config"
+	"github.com/t-Ikonen/bbbookingsystem/internal/handlers"
+	"github.com/t-Ikonen/bbbookingsystem/internal/render"
 )
 
 const portNum = ":8080"

@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/t-Ikonen/bbbookingsystem/pkg/config"
-	"github.com/t-Ikonen/bbbookingsystem/pkg/models"
-	"github.com/t-Ikonen/bbbookingsystem/pkg/render"
+	"github.com/t-Ikonen/bbbookingsystem/internal/config"
+	"github.com/t-Ikonen/bbbookingsystem/internal/models"
+	"github.com/t-Ikonen/bbbookingsystem/internal/render"
 )
 
 // Repo used by handlers
