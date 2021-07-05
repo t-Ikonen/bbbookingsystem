@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
+	"github.com/t-Ikonen/bbbookingsystem/internal/forms"
 	"github.com/t-Ikonen/bbbookingsystem/internal/models"
 	"github.com/t-Ikonen/bbbookingsystem/internal/render"
 )
@@ -34,12 +35,6 @@ func NewHandlers(r *Repository) {
 
 //Home page function hadles Home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-
-	// ipAddr := r.RemoteAddr
-	// m.App.Session.Put(r.Context(), "remote_ip", ipAddr)
-
-	// fmt.Println("IP on home sivulla ", ipAddr)
-	//send data to template
 	render.RenderTemplate(w, "home.page.tmpl.html", &models.TemplateData{}, r)
 }
 
@@ -92,7 +87,48 @@ func (m *Repository) BookingJSON(w http.ResponseWriter, r *http.Request) {
 
 //Reservation to render Reservation page
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "reservation.page.tmpl.html", &models.TemplateData{}, r)
+	var emptyReservation models.Reservation
+
+	data := make(map[string]interface{})
+	data["reservation"] = emptyReservation
+	render.RenderTemplate(w, "reservation.page.tmpl.html", &models.TemplateData{
+		Form: forms.New(nil),
+		Data: data,
+	}, r)
+}
+
+//PostReservation handel posting Reservetation form
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Email:     r.Form.Get("email"),
+		Phone:     r.Form.Get("phone"),
+	}
+	form := forms.New(r.PostForm)
+
+	// form.Has("first_name", r)
+	form.Required("first_name", "last_name", "email")
+
+	form.MinLenght("first_name", 3, r)
+	form.ValidEmail("email")
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+
+		render.RenderTemplate(w, "reservation.page.tmpl.html", &models.TemplateData{
+			Form: form,
+			Data: data,
+		}, r)
+		return
+	}
+
 }
 
 //Contact to render contact page

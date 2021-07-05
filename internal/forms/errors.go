@@ -1,4 +1,4 @@
-package errors
+package forms
 
 type errors map[string][]string
 
@@ -12,7 +12,7 @@ func (e errors) Get(field string) string {
 	es := e[field]
 	if len(es) == 0 {
 		return ""
-	} else {
-		return es[0]
 	}
+	return es[0]
+
 }
