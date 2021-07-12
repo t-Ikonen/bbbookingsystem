@@ -1,0 +1,10 @@
+mode: set
+github.com/t-Ikonen/bbbookingsystem/cmd/web/main.go:23.13,26.16 2 0
+github.com/t-Ikonen/bbbookingsystem/cmd/web/main.go:29.2,36.16 4 0
+github.com/t-Ikonen/bbbookingsystem/cmd/web/main.go:26.16,28.3 1 0
+github.com/t-Ikonen/bbbookingsystem/cmd/web/main.go:40.18,57.16 10 1
+github.com/t-Ikonen/bbbookingsystem/cmd/web/main.go:61.2,69.12 6 1
+github.com/t-Ikonen/bbbookingsystem/cmd/web/main.go:57.16,60.3 1 0
+github.com/t-Ikonen/bbbookingsystem/cmd/web/middleware.go:18.45,28.2 3 1
+github.com/t-Ikonen/bbbookingsystem/cmd/web/middleware.go:31.50,33.2 1 1
+github.com/t-Ikonen/bbbookingsystem/cmd/web/routes.go:12.49,40.2 19 1

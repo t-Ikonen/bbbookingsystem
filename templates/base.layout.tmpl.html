@@ -8,7 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.4/dist/css/datepicker-bs4.min.css">
-   <!--  <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">  -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">  
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 </head>
@@ -80,20 +80,33 @@
 
     let attention = Prompt()
     function notieAlert(msg,type) {
-    notie.alert ({
-    type: type, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
-    text: msg,
+        notie.alert ({
+        type: type, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
+        text: msg,
     })
     }
 
     function swalAlert (title, html, icon, buttonText) {
-    Swal.fire({
-    title: title,
-    html: html,
-    icon: icon,
-    confirmButtonText: buttonText,
-    })
+        Swal.fire({
+            title: title,
+            html: html,
+            icon: icon,
+            confirmButtonText: buttonText,
+        })
     }
+
+    {{with .Error}}
+        notieAlert("{{.}}", "error");
+    {{end}}
+
+    {{with .Flash}}
+        notieAlert("{{.}}", "success");
+    {{end}}
+
+    {{with .Warning}}
+        notieAlert("{{.}}", "warning");
+    {{end}}
+
 
     function Prompt() {
             let toast = function (c) {

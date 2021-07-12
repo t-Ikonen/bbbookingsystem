@@ -129,6 +129,9 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+	http.Redirect(w, r, "/reservationsummary", http.StatusSeeOther)
+
 }
 
 //Contact to render contact page
@@ -149,4 +152,21 @@ func (m *Repository) Frostsuite(w http.ResponseWriter, r *http.Request) {
 //Snowsuite renders Snowsuite page
 func (m *Repository) Snowsuite(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, "snowsuite.page.tmpl.html", &models.TemplateData{}, r)
+}
+
+//Snowsuite renders Snowsuite page
+func (m *Repository) Reservationsummary(w http.ResponseWriter, r *http.Request) {
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		log.Print("Cannot get reservation item from session")
+		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	m.App.Session.Remove(r.Context(), "reservation")
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+	render.RenderTemplate(w, "reservationsummary.page.tmpl.html", &models.TemplateData{
+		Data: data,
+	}, r)
 }

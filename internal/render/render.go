@@ -18,6 +18,10 @@ var functions = template.FuncMap{}
 var appConfig *config.AppConfig
 
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.Flash = appConfig.Session.PopString(r.Context(), "flash")
+	td.Error = appConfig.Session.PopString(r.Context(), "error")
+	td.Warning = appConfig.Session.PopString(r.Context(), "warning")
+
 	td.CSRFToken = nosurf.Token(r)
 	return td
 }
@@ -38,7 +42,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateDa
 
 	t, ok := tmplCache[tmpl]
 	if !ok {
-		log.Fatal("Could not get template from template cache")
+		log.Fatal("Could not get template from template cache ", ok, t)
 	}
 
 	buf := new(bytes.Buffer)
@@ -56,18 +60,25 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateDa
 //CreateTemplateCache creates template cache
 func CreateTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
+	//pages, err := filepath.Glob("/templates/*.*")
 	pages, err := filepath.Glob("./templates/*.page.tmpl.html")
+	//pages, err := filepath.Glob("*")
+
+	println("pages: ", pages)
+
 	if err != nil {
+		fmt.Println("template file path error")
 		return myCache, err
 	}
-
+	fmt.Println("alkaa for loop sivujen lapikaynti")
 	for _, page := range pages {
+		fmt.Println("loopissa")
 		name := filepath.Base(page)
 		//fmt.Println("page filelistassa on", page, "ja name on ", name)
 
 		tmplSet, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
-			//fmt.Println("Template setin luonti")
+			fmt.Println("Template setin luonti")
 			return myCache, err
 		}
 		matches, err := filepath.Glob("./templates/*.layout.tmpl.html")
@@ -83,6 +94,12 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 			}
 		}
 		myCache[name] = tmplSet
+		fmt.Println("tmplSet ", tmplSet)
 	}
+
+	for index, element := range myCache {
+		fmt.Println(index, "=>", element)
+	}
+	fmt.Println(" CreateTemplateCache() OK")
 	return myCache, nil
 }

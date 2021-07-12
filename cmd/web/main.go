@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
 	"github.com/t-Ikonen/bbbookingsystem/internal/handlers"
+	"github.com/t-Ikonen/bbbookingsystem/internal/models"
 	"github.com/t-Ikonen/bbbookingsystem/internal/render"
 )
 
@@ -19,6 +21,26 @@ var session *scs.SessionManager
 
 //Main of HelloWeb app
 func main() {
+
+	err := run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	srv := &http.Server{
+		Addr:    portNum,
+		Handler: Routes(&appCnf),
+	}
+	fmt.Printf("Starting app on port %s for your pleasure \n", portNum)
+	//fmt.Println(fmt.Sprintf("Starting app on port %s for your pleasure \n", portNum))
+	err = srv.ListenAndServe()
+	log.Fatal(err)
+
+}
+
+func run() error {
+
+	// Reservation model stored in session
+	gob.Register(models.Reservation{})
 
 	//change to true when in production
 	appCnf.InProduction = false
@@ -34,6 +56,7 @@ func main() {
 	tmplCache, err := render.CreateTemplateCache()
 	if err != nil {
 		fmt.Printf("Error crating template configuration, error %s \n", err)
+		return err
 		//fmt.Println(fmt.Sprintf("Error crating template configuration, error %s \n", err))
 	}
 	appCnf.TemplateCache = tmplCache
@@ -44,13 +67,5 @@ func main() {
 
 	render.NewTemplates(&appCnf)
 
-	srv := &http.Server{
-		Addr:    portNum,
-		Handler: Routes(&appCnf),
-	}
-	fmt.Printf("Starting app on port %s for your pleasure \n", portNum)
-	//fmt.Println(fmt.Sprintf("Starting app on port %s for your pleasure \n", portNum))
-	err = srv.ListenAndServe()
-	log.Fatal(err)
-
+	return nil
 }
