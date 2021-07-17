@@ -17,6 +17,8 @@ var functions = template.FuncMap{}
 
 var appConfig *config.AppConfig
 
+var pathToTemplates = "./templates"
+
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
 	td.Flash = appConfig.Session.PopString(r.Context(), "flash")
 	td.Error = appConfig.Session.PopString(r.Context(), "error")
@@ -60,46 +62,45 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateDa
 //CreateTemplateCache creates template cache
 func CreateTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
-	//pages, err := filepath.Glob("/templates/*.*")
-	pages, err := filepath.Glob("./templates/*.page.tmpl.html")
-	//pages, err := filepath.Glob("*")
 
-	println("pages: ", pages)
+	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.tmpl.html", pathToTemplates))
+
+	//println("pages: ", pages)
 
 	if err != nil {
-		fmt.Println("template file path error")
+		//fmt.Println("template file path error")
 		return myCache, err
 	}
-	fmt.Println("alkaa for loop sivujen lapikaynti")
+	//fmt.Println("alkaa for loop sivujen lapikaynti")
 	for _, page := range pages {
-		fmt.Println("loopissa")
+		//fmt.Println("loopissa")
 		name := filepath.Base(page)
 		//fmt.Println("page filelistassa on", page, "ja name on ", name)
 
 		tmplSet, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
-			fmt.Println("Template setin luonti")
+			//fmt.Println("Template setin luonti")
 			return myCache, err
 		}
-		matches, err := filepath.Glob("./templates/*.layout.tmpl.html")
+		matches, err := filepath.Glob(fmt.Sprintf("%s/*.page.tmpl.html", pathToTemplates))
 		if err != nil {
 			fmt.Println("Matches")
 			return myCache, err
 		}
 		if len(matches) > 0 {
-			tmplSet, err = tmplSet.ParseGlob("./templates/*.layout.tmpl.html")
+			tmplSet, err = tmplSet.ParseGlob(fmt.Sprintf("%s/*.page.tmpl.html", pathToTemplates))
 			if err != nil {
 
 				return myCache, err
 			}
 		}
 		myCache[name] = tmplSet
-		fmt.Println("tmplSet ", tmplSet)
+		//fmt.Println("tmplSet ", tmplSet)
 	}
 
-	for index, element := range myCache {
-		fmt.Println(index, "=>", element)
-	}
-	fmt.Println(" CreateTemplateCache() OK")
+	//	for index, element := range myCache {
+	//		fmt.Println(index, "=>", element)
+	//	}
+	//fmt.Println(" CreateTemplateCache() OK")
 	return myCache, nil
 }
