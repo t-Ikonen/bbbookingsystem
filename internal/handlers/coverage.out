@@ -1,0 +1,23 @@
+mode: set
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:25.47,29.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:32.33,34.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:37.67,39.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:42.68,53.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:56.70,58.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:61.74,66.2 3 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:74.74,80.16 3 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:83.2,85.14 3 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:80.16,82.3 1 0
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:89.74,98.2 4 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:101.78,103.16 2 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:107.2,121.19 6 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:132.2,133.65 2 0
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:103.16,106.3 2 0
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:121.19,130.3 4 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:138.70,140.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:143.77,145.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:148.73,150.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:153.72,155.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:158.81,160.9 2 0
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:166.2,171.7 4 0
+github.com/t-Ikonen/bbbookingsystem/internal/handlers/handlers.go:160.9,165.3 4 0

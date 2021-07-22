@@ -1,15 +1,15 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 )
 
 type postData struct {
-	key    string
-	values string
+	key   string
+	value string
 }
 
 var theTests = []struct {
@@ -60,7 +60,20 @@ func TestHandlers(t *testing.T) {
 				t.Errorf("for %s expected %d but got %d", e.name, e.expectedStatusCode, resp.StatusCode)
 			}
 		} else {
-			fmt.Println("POST")
+			//fmt.Println("POST")
+			values := url.Values{}
+			for _, x := range e.params {
+				values.Add(x.key, x.value)
+			}
+			resp, err := testServer.Client().PostForm(testServer.URL+e.url, values)
+			if err != nil {
+				t.Log(err)
+				t.Fatal(err)
+			}
+			if resp.StatusCode != e.expectedStatusCode {
+				t.Errorf("for %s expected %d but got %d", e.name, e.expectedStatusCode, resp.StatusCode)
+			}
+
 		}
 
 	}

@@ -58,7 +58,7 @@ func getRoutes() http.Handler {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer)
 	//mux.Use(WriteToConsole)
-	mux.Use(NoSurf)
+	//mux.Use(NoSurf)
 	mux.Use(session.LoadAndSave)
 	//routes
 	mux.Get("/", Repo.Home)
@@ -132,7 +132,7 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 			}
 		}
 		myCache[name] = tmplSet
-		fmt.Println("tmplSet ", tmplSet)
+		//fmt.Println("tmplSet ", tmplSet)
 	}
 
 	return myCache, nil

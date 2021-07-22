@@ -1,0 +1,23 @@
+mode: set
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:22.84,29.2 5 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:32.40,34.2 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:36.108,39.24 2 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:45.2,46.9 2 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:50.2,54.16 5 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:58.2,58.12 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:39.24,41.3 1 0
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:41.8,43.3 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:46.9,49.3 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:54.16,57.3 2 0
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:62.67,67.16 3 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:72.2,72.29 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:94.2,94.21 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:67.16,70.3 1 0
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:72.29,75.17 3 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:78.3,79.17 2 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:83.3,83.23 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:90.3,90.26 1 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:75.17,77.4 1 0
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:79.17,82.4 2 0
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:83.23,85.18 2 1
+github.com/t-Ikonen/bbbookingsystem/internal/render/render.go:85.18,88.5 1 0
