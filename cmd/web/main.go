@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
 	"github.com/t-Ikonen/bbbookingsystem/internal/handlers"
+	"github.com/t-Ikonen/bbbookingsystem/internal/helpers"
 	"github.com/t-Ikonen/bbbookingsystem/internal/models"
 	"github.com/t-Ikonen/bbbookingsystem/internal/render"
 )
@@ -18,6 +20,8 @@ const portNum = ":8080"
 
 var appCnf config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 //Main of HelloWeb app
 func main() {
@@ -33,7 +37,9 @@ func main() {
 	fmt.Printf("Starting app on port %s for your pleasure \n", portNum)
 	//fmt.Println(fmt.Sprintf("Starting app on port %s for your pleasure \n", portNum))
 	err = srv.ListenAndServe()
-	log.Fatal(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
 
@@ -45,6 +51,13 @@ func run() error {
 	//change to true when in production
 	appCnf.InProduction = false
 
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	appCnf.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	appCnf.ErrorLog = errorLog
+
+	//set up session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true
@@ -55,7 +68,7 @@ func run() error {
 
 	tmplCache, err := render.CreateTemplateCache()
 	if err != nil {
-		fmt.Printf("Error crating template configuration, error %s \n", err)
+		fmt.Printf("Cannot create template cache, error %s \n", err)
 		return err
 		//fmt.Println(fmt.Sprintf("Error crating template configuration, error %s \n", err))
 	}
@@ -66,6 +79,7 @@ func run() error {
 	handlers.NewHandlers(repo)
 
 	render.NewTemplates(&appCnf)
+	helpers.NewHelpers(&appCnf)
 
 	return nil
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
 	"github.com/t-Ikonen/bbbookingsystem/internal/forms"
+	"github.com/t-Ikonen/bbbookingsystem/internal/helpers"
 	"github.com/t-Ikonen/bbbookingsystem/internal/models"
 	"github.com/t-Ikonen/bbbookingsystem/internal/render"
 )
@@ -40,16 +41,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 
 // About func handles About page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	// stringMap := make(map[string]string)
-	// stringMap["test"] = "Hello again"
-
-	// remoteIp := m.App.Session.GetString(r.Context(), "remote_ip")
-	// stringMap["remote_ip"] = remoteIp
-	// fmt.Println("IP on About sivulla ", remoteIp)
-
-	render.RenderTemplate(w, "about.page.tmpl.html", &models.TemplateData{
-		//StringMap: stringMap,
-	}, r)
+	render.RenderTemplate(w, "about.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 //Booking to render Booking page
@@ -78,7 +70,9 @@ func (m *Repository) BookingJSON(w http.ResponseWriter, r *http.Request) {
 	}
 	out, err := json.MarshalIndent(resp, "", "     ")
 	if err != nil {
-		log.Println(err)
+		//log.Println(err)
+		helpers.ServerError(w, err)
+		return
 	}
 	log.Println(string(out))
 	w.Header().Set("Content-Type", "application/json")
@@ -100,8 +94,10 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 //PostReservation handel posting Reservetation form
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
+	//err = errors.New("this is error from Postreservation, testing")
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
+		//log.Println(err)
 		return
 	}
 	reservation := models.Reservation{
@@ -158,7 +154,8 @@ func (m *Repository) Snowsuite(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) Reservationsummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
-		log.Print("Cannot get reservation item from session")
+		//log.Print("Cannot get reservation item from session")
+		m.App.ErrorLog.Println("Can't get error from session")
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
