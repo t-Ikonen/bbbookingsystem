@@ -19,6 +19,11 @@ var appConfig *config.AppConfig
 
 var pathToTemplates = "./templates"
 
+//NewTemplates sets the package for the template package
+func NewTemplates(a *config.AppConfig) {
+	appConfig = a
+}
+
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
 	td.Flash = appConfig.Session.PopString(r.Context(), "flash")
 	td.Error = appConfig.Session.PopString(r.Context(), "error")
@@ -26,11 +31,6 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 
 	td.CSRFToken = nosurf.Token(r)
 	return td
-}
-
-//NewTemplates sets the package for the template package
-func NewTemplates(a *config.AppConfig) {
-	appConfig = a
 }
 
 func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateData, r *http.Request) error {
@@ -74,13 +74,13 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 		if err != nil {
 			return myCache, err
 		}
-		matches, err := filepath.Glob(fmt.Sprintf("%s/*.page.tmpl.html", pathToTemplates))
+		matches, err := filepath.Glob(fmt.Sprintf("%s/*.layout.tmpl.html", pathToTemplates))
 		if err != nil {
-			fmt.Println("Matches")
+			fmt.Println("Matches error")
 			return myCache, err
 		}
 		if len(matches) > 0 {
-			tmplSet, err = tmplSet.ParseGlob(fmt.Sprintf("%s/*.page.tmpl.html", pathToTemplates))
+			tmplSet, err = tmplSet.ParseGlob(fmt.Sprintf("%s/*.layout.tmpl.html", pathToTemplates))
 			if err != nil {
 
 				return myCache, err

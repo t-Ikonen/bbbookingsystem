@@ -39,7 +39,7 @@
 <script>
   
 
-document.getElementById("check-availability-button").addEventListener("click", function (){
+  document.getElementById("check-availability-button").addEventListener("click", function (){
   let html = `
       <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
           <div class="form-row">
@@ -58,11 +58,39 @@ document.getElementById("check-availability-button").addEventListener("click", f
       </form>
       `;
       attention.custom({
-          title: 'Choose your dates',
+          title: "Choose your dates",
           msg: html,
+
+          willOpen: () => {
+            const elem = document.getElementById("datePicker-modal");
+            const rp = new DateRangePicker(elem, {
+                format: 'dd-mm-yyyy',
+                showOnFocus: true,
+            })
+            },
+          didOpen: () => {
+              document.getElementById("start").removeAttribute("disabled");
+              document.getElementById("end").removeAttribute("disabled");
+          },
+          callback: function(results) {
+            console.log("callback called");
+            let form = document.getElementById("check-availability-form");
+            let formData = new FormData(form);
+            
+            formData.append("csrf_token", "{{.CSRFToken}}");
+
+            fetch('/bookingjson', {
+              method: "post",
+              body:   formData,
+            })
+              
+              .then(response => response.json())
+              .then(data => {
+               // console.log(data);
+                console.log(data.Message)
+              })
+          }
       });
 })
 </script>
-
-
 {{end}}
