@@ -1,0 +1,6 @@
+create_table("pricing") {
+	t.Column("id", "integer", {primary: true})
+	t.Column("room_name", "string", {})
+	t.Column("price", "decimal", {})
+	t.Timestamps()
+}

@@ -1,0 +1,8 @@
+create_table("rooms") {
+	t.Column("id", "integer", {primary: true})
+	t.Column("room_name", "string", {"default": ""})
+	t.Column("shower", "boolean", {"default": "0"})
+	t.Column("minibar", "boolean", {"default": "0"})
+	t.Column("pricing_id", "integer", {})
+	t.Timestamps()
+}
