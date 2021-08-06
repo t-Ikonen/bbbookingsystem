@@ -10,6 +10,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
+	"github.com/t-Ikonen/bbbookingsystem/internal/driver"
 	"github.com/t-Ikonen/bbbookingsystem/internal/handlers"
 	"github.com/t-Ikonen/bbbookingsystem/internal/helpers"
 	"github.com/t-Ikonen/bbbookingsystem/internal/models"
@@ -26,7 +27,7 @@ var errorLog *log.Logger
 //Main of HelloWeb app
 func main() {
 
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,7 +35,10 @@ func main() {
 		Addr:    portNum,
 		Handler: Routes(&appCnf),
 	}
+
+	defer db.SQL.Close()
 	fmt.Printf("Starting app on port %s for your pleasure \n", portNum)
+
 	//fmt.Println(fmt.Sprintf("Starting app on port %s for your pleasure \n", portNum))
 	err = srv.ListenAndServe()
 	if err != nil {
@@ -43,10 +47,13 @@ func main() {
 
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 
 	// Reservation model stored in session
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Restriction{})
+	gob.Register(models.Room{})
 
 	//change to true when in production
 	appCnf.InProduction = false
@@ -66,20 +73,27 @@ func run() error {
 
 	appCnf.Session = session
 
+	// connect to DB
+	log.Println("Connecting to database...")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bbbsystem user=tomi password=")
+	if err != nil {
+		log.Fatal("Can not connect to DB....")
+	}
+	log.Println("Connected to database")
 	tmplCache, err := render.CreateTemplateCache()
 	if err != nil {
 		fmt.Printf("Cannot create template cache, error %s \n", err)
-		return err
+		return nil, err
 		//fmt.Println(fmt.Sprintf("Error crating template configuration, error %s \n", err))
 	}
 	appCnf.TemplateCache = tmplCache
 	appCnf.UseCache = false
 
-	repo := handlers.NewRepo(&appCnf)
+	repo := handlers.NewRepo(&appCnf, db)
 	handlers.NewHandlers(repo)
 
-	render.NewTemplates(&appCnf)
+	render.NewRenderer(&appCnf)
 	helpers.NewHelpers(&appCnf)
 
-	return nil
+	return db, nil
 }

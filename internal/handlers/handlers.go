@@ -8,10 +8,13 @@ import (
 	"net/http"
 
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
+	"github.com/t-Ikonen/bbbookingsystem/internal/driver"
 	"github.com/t-Ikonen/bbbookingsystem/internal/forms"
 	"github.com/t-Ikonen/bbbookingsystem/internal/helpers"
 	"github.com/t-Ikonen/bbbookingsystem/internal/models"
 	"github.com/t-Ikonen/bbbookingsystem/internal/render"
+	"github.com/t-Ikonen/bbbookingsystem/internal/repository"
+	"github.com/t-Ikonen/bbbookingsystem/internal/repository/dbrepo"
 )
 
 // Repo used by handlers
@@ -20,12 +23,14 @@ var Repo *Repository
 //Repository is repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 //NewRepo a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
@@ -36,17 +41,17 @@ func NewHandlers(r *Repository) {
 
 //Home page function hadles Home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl.html", &models.TemplateData{}, r)
+	render.Template(w, "home.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 // About func handles About page
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl.html", &models.TemplateData{}, r)
+	render.Template(w, "about.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 //Booking to render Booking page
 func (m *Repository) Booking(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "booking.page.tmpl.html", &models.TemplateData{}, r)
+	render.Template(w, "booking.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 //PostBooking to post Booking page data
@@ -85,7 +90,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 	data := make(map[string]interface{})
 	data["reservation"] = emptyReservation
-	render.RenderTemplate(w, "reservation.page.tmpl.html", &models.TemplateData{
+	render.Template(w, "reservation.page.tmpl.html", &models.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
 	}, r)
@@ -118,7 +123,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 
-		render.RenderTemplate(w, "reservation.page.tmpl.html", &models.TemplateData{
+		render.Template(w, "reservation.page.tmpl.html", &models.TemplateData{
 			Form: form,
 			Data: data,
 		}, r)
@@ -132,22 +137,22 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 //Contact to render contact page
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "contact.page.tmpl.html", &models.TemplateData{}, r)
+	render.Template(w, "contact.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 //Northernlights to render northernlights page
 func (m *Repository) Northernlights(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "northernlights.page.tmpl.html", &models.TemplateData{}, r)
+	render.Template(w, "northernlights.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 //Frostsuite to render Frostsuite page
 func (m *Repository) Frostsuite(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "frostsuite.page.tmpl.html", &models.TemplateData{}, r)
+	render.Template(w, "frostsuite.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 //Snowsuite renders Snowsuite page
 func (m *Repository) Snowsuite(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "snowsuite.page.tmpl.html", &models.TemplateData{}, r)
+	render.Template(w, "snowsuite.page.tmpl.html", &models.TemplateData{}, r)
 }
 
 //Snowsuite renders Snowsuite page
@@ -163,7 +168,7 @@ func (m *Repository) Reservationsummary(w http.ResponseWriter, r *http.Request) 
 	m.App.Session.Remove(r.Context(), "reservation")
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
-	render.RenderTemplate(w, "reservationsummary.page.tmpl.html", &models.TemplateData{
+	render.Template(w, "reservationsummary.page.tmpl.html", &models.TemplateData{
 		Data: data,
 	}, r)
 }

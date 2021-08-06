@@ -19,11 +19,12 @@ var appConfig *config.AppConfig
 
 var pathToTemplates = "./templates"
 
-//NewTemplates sets the package for the template package
-func NewTemplates(a *config.AppConfig) {
+//NewRender sets the package for the template package
+func NewRenderer(a *config.AppConfig) {
 	appConfig = a
 }
 
+//AddDefaultData adds data for all templates
 func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
 	td.Flash = appConfig.Session.PopString(r.Context(), "flash")
 	td.Error = appConfig.Session.PopString(r.Context(), "error")
@@ -33,7 +34,8 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	return td
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string, tmplD *models.TemplateData, r *http.Request) error {
+//Template renders templates using html.tmpl to full htmp pages
+func Template(w http.ResponseWriter, tmpl string, tmplD *models.TemplateData, r *http.Request) error {
 	var tmplCache map[string]*template.Template
 
 	if appConfig.UseCache {
