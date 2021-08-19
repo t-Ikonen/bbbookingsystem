@@ -26,6 +26,9 @@ type User struct {
 type Room struct {
 	ID         int
 	RoomName   string
+	Minibar    bool
+	Shower     bool
+	PricingId  int
 	CreatedAt  time.Time
 	ModifiedAt time.Time
 }
@@ -46,7 +49,7 @@ type Reservation struct {
 	Email      string
 	Phone      string
 	StartDate  time.Time
-	EndSate    time.Time
+	EndDate    time.Time
 	RoomId     int
 	CreatedAt  time.Time
 	ModifiedAt time.Time

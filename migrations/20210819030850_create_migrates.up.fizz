@@ -1,0 +1,3 @@
+create_table("migrates") {
+	t.Column("down", "string", {})
+}
