@@ -64,7 +64,8 @@
           willOpen: () => {
             const elem = document.getElementById("datePicker-modal");
             const rp = new DateRangePicker(elem, {
-                format: 'dd-mm-yyyy',
+              format: 'mm-dd-yyyy',
+                MinDate: new Date(),
                 showOnFocus: true,
             })
             },
@@ -78,6 +79,7 @@
             let formData = new FormData(form);
             
             formData.append("csrf_token", "{{.CSRFToken}}");
+            formData.append("room_id", "3")
 
             fetch('/bookingjson', {
               method: "post",

@@ -28,6 +28,8 @@ func Routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/chooseroom/{id}", handlers.Repo.ChooseRoom)
 
+	mux.Get("/bookroom", handlers.Repo.BookRoom)
+
 	mux.Get("/frostsuite", handlers.Repo.Frostsuite)
 	mux.Get("/northernlights", handlers.Repo.Northernlights)
 

@@ -111,23 +111,58 @@ func (m *Repository) PostBooking(w http.ResponseWriter, r *http.Request) {
 }
 
 type jsonResponse struct {
-	OK      bool   `json:"ok"`
-	Message string `jsnon:"message"`
+	OK        bool   `json:"ok"`
+	Message   string `jsnon:"message"`
+	RoomId    string `json:"room_id"`
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
 }
 
 //BookingJSON to request availability JSON format
 func (m *Repository) BookingJSON(w http.ResponseWriter, r *http.Request) {
-	resp := jsonResponse{
-		OK:      true,
-		Message: "Not Available",
+
+	sd := r.Form.Get("start")
+	ed := r.Form.Get("end")
+	layout := "01-02-2006"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		//log.Println(err)
+		helpers.ServerError(w, err)
+		return
 	}
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		//log.Println(err)
+		helpers.ServerError(w, err)
+		return
+	}
+	roomId, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		//log.Println(err)
+		helpers.ServerError(w, err)
+		return
+	}
+	available, err := m.DB.SearchAvailabilityByDatesByRoomId(startDate, endDate, roomId)
+	if err != nil {
+		//log.Println(err)
+		helpers.ServerError(w, err)
+		return
+	}
+	resp := jsonResponse{
+		OK:        available,
+		Message:   "",
+		StartDate: sd,
+		EndDate:   ed,
+		RoomId:    strconv.Itoa(roomId),
+	}
+
 	out, err := json.MarshalIndent(resp, "", "     ")
 	if err != nil {
 		//log.Println(err)
 		helpers.ServerError(w, err)
 		return
 	}
-	log.Println(string(out))
+	//log.Println(string(out))
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
 }
@@ -172,7 +207,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
-		helpers.ServerError(w, errors.New("Cannot get from session"))
+		helpers.ServerError(w, errors.New("cannot get from session"))
 		return
 	}
 
@@ -235,7 +270,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//ChooseRoom to render Choose Room page
+//ChooseRoom to render Choose Room page that lists availabe room
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	roomId, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
@@ -254,7 +289,46 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/reservation", http.StatusSeeOther)
 
-	//render.Template(w, "contact.page.tmpl.html", &models.TemplateData{}, r)
+}
+
+//BookRoom takes URL parameters, makes reservation into session, redirects to make reservation page
+func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+
+	roomId, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	sd := r.URL.Query().Get("s")
+	ed := r.URL.Query().Get("e")
+	// log.Println("room ID from URL:", roomId)
+	// log.Println("start from URL:", sd)
+	// log.Println("end from URL:", ed)
+
+	layout := "01-02-2006"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	var res models.Reservation
+	log.Println("getting room name by ID->", roomId, " <-")
+	room, err := m.DB.GetRoomNameById(roomId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	res.Room.RoomName = room.RoomName
+	res.RoomId = roomId
+	res.StartDate = startDate
+	res.EndDate = endDate
+
+	m.App.Session.Put(r.Context(), "reservation", res)
+
+	http.Redirect(w, r, "/reservation", http.StatusSeeOther)
 }
 
 //Contact to render contact page
@@ -277,7 +351,7 @@ func (m *Repository) Snowsuite(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, "snowsuite.page.tmpl.html", &models.TemplateData{}, r)
 }
 
-//Snowsuite renders Snowsuite page
+//Reservationsummary renders the reservation summary page
 func (m *Repository) Reservationsummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
