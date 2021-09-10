@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"testing"
 
 	"net/http"
 	"path/filepath"
@@ -28,7 +29,7 @@ var pathToTemplates = "./../../templates"
 
 var functions = template.FuncMap{}
 
-func getRoutes() http.Handler {
+func TestMain(m *testing.M) {
 	// Reservation model stored in session
 	gob.Register(models.Reservation{})
 
@@ -49,6 +50,11 @@ func getRoutes() http.Handler {
 
 	appCnf.Session = session
 
+	mailChan := make(chan models.MailData)
+	appCnf.MailChan = mailChan
+	defer close(mailChan)
+	listenForMail()
+
 	tmplCache, err := CreateTestTemplateCache()
 	if err != nil {
 		fmt.Printf("Error crating template configuration, error %s \n", err)
@@ -58,10 +64,21 @@ func getRoutes() http.Handler {
 	appCnf.TemplateCache = tmplCache
 	appCnf.UseCache = true
 
-	repo := NewRepo(&appCnf)
+	repo := NewTestRepo(&appCnf)
 	NewHandlers(repo)
-
 	render.NewRenderer(&appCnf)
+	os.Exit(m.Run())
+}
+
+func listenForMail() {
+	go func() {
+		for {
+			_ = <-appCnf.MailChan
+		}
+	}()
+}
+
+func getRoutes() http.Handler {
 
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer)
