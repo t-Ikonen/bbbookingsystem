@@ -517,7 +517,41 @@ func (m *Repository) ShowLogout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
+//AdminDashboard show dashboard page for admin only
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, "admindashboard.page.tmpl.html", &models.TemplateData{}, r)
+
+}
+
+//AdminNewReservations show new reservations for admin only
+func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, "adminnewreservations.page.tmpl.html", &models.TemplateData{}, r)
+
+}
+
+//AdminAllReservations show all reservations for admin only
+func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
+	reservations, err := m.DB.AllReservations()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data := make(map[string]interface{})
+	data["reservations"] = reservations
+	render.Template(w, "adminallreservations.page.tmpl.html", &models.TemplateData{
+		Data: data,
+	}, r)
+
+}
+
+//AdminCalendar show statistics for admin only
+func (m *Repository) AdminCalendar(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, "admincalendar.page.tmpl.html", &models.TemplateData{}, r)
+
+}
+
+//AdminStatistics show statistics for admin only
+func (m *Repository) AdminStatistics(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, "statistics.page.tmpl.html", &models.TemplateData{}, r)
 
 }

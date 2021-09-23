@@ -189,7 +189,7 @@ func (m *postgresDBRepo) GetUsedById(id int) (models.User, error) {
 		&user.Password,
 		&user.AccessLevel,
 	)
-	if err != err {
+	if err != nil {
 		return user, err
 	}
 	return user, nil
@@ -236,9 +236,60 @@ func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, 
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(testPassword))
 	if err == bcrypt.ErrMismatchedHashAndPassword {
-		return 0, "", errors.New("incorrect password!")
+		return 0, "", errors.New("incorrect password")
 	} else if err != nil {
 		return 0, "", err
 	}
 	return id, hashedPassword, nil
+}
+
+//AllReservations gets a slice  of  all the reservations for admin use
+func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var reservation []models.Reservation
+
+	query := ` 
+		SELECT r.id, r.first_name, r.last_name, r.phone, r.email, r.start_date, r.end_date, r.room_id,
+			r.created_at, r.updated_at, rm.id, rm.room_name
+		FROM
+			reservations as r
+		LEFT JOIN
+			rooms as rm 
+		ON 
+			(r.room_id = rm.id) 
+		ORDER BY
+			r.start_date
+	`
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		return reservation, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var i models.Reservation
+		err = rows.Scan(
+			&i.ID,
+			&i.FirstName,
+			&i.LastName,
+			&i.Email,
+			&i.Phone,
+			&i.StartDate,
+			&i.EndDate,
+			&i.RoomId,
+			&i.CreatedAt,
+			&i.ModifiedAt,
+			&i.Room.ID,
+			&i.Room.RoomName,
+		)
+		if err != nil {
+			return reservation, err
+		}
+		reservation = append(reservation, i)
+	}
+	if err = rows.Err(); err != nil {
+		return reservation, err
+	}
+	return reservation, nil
 }

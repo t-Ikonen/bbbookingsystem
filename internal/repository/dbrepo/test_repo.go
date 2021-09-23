@@ -41,7 +41,7 @@ func (m *testDBRepo) GetRoomNameById(id int) (models.Room, error) {
 	var room models.Room
 	// 3 is number of rooms in DB for renting
 	if id > 3 {
-		return room, errors.New("Some error")
+		return room, errors.New("some error")
 	}
 	return room, nil
 }
@@ -61,4 +61,10 @@ func (m *testDBRepo) UpdateUser(u models.User) error {
 
 func (m *testDBRepo) Authenticate(email, testPassword string) (int, string, error) {
 	return 1, "", nil
+}
+
+//AllReservations gets a slice  of  all the reservations for admin use
+func (m *testDBRepo) AllReservations() ([]models.Reservation, error) {
+	var reservation []models.Reservation
+	return reservation, nil
 }
