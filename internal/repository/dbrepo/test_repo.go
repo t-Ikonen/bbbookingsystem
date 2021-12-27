@@ -68,3 +68,31 @@ func (m *testDBRepo) AllReservations() ([]models.Reservation, error) {
 	var reservation []models.Reservation
 	return reservation, nil
 }
+
+//AllNewReservations gets a slice  of  all the unprocessed reservations for admin use
+func (m *testDBRepo) AllNewReservations() ([]models.Reservation, error) {
+	var reservation []models.Reservation
+	return reservation, nil
+}
+
+//GetReservationById get one unprocessed reservation by reservation ID
+func (m *testDBRepo) GetReservationById(id int) (models.Reservation, error) {
+	var res models.Reservation
+	return res, nil
+
+}
+
+//UpdateReservation updates reservation
+func (m *testDBRepo) UpdateReservation(u models.Reservation) error {
+
+	return nil
+}
+
+//deletes one reservation by ID
+func (m *testDBRepo) DeleteReservation(id int) error {
+	return nil
+}
+func (m *testDBRepo) UpdatePrcessed(id, processed int) error {
+
+	return nil
+}

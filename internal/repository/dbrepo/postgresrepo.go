@@ -251,7 +251,61 @@ func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 	var reservation []models.Reservation
 
 	query := ` 
-		SELECT r.id, r.first_name, r.last_name, r.phone, r.email, r.start_date, r.end_date, r.room_id,
+		SELECT 
+			r.id, r.first_name, r.last_name, r.phone, r.email, r.start_date, r.end_date, r.room_id,
+			r.created_at, r.updated_at, r.processed,  rm.id, rm.room_name
+		FROM
+			reservations as r
+		LEFT JOIN
+			rooms as rm 
+		ON 
+			(r.room_id = rm.id) 
+		ORDER BY
+			r.start_date
+	`
+	rows, err := m.DB.QueryContext(ctx, query)
+	if err != nil {
+		return reservation, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var i models.Reservation
+		err = rows.Scan(
+			&i.ID,
+			&i.FirstName,
+			&i.LastName,
+			&i.Email,
+			&i.Phone,
+			&i.StartDate,
+			&i.EndDate,
+			&i.RoomId,
+			&i.CreatedAt,
+			&i.ModifiedAt,
+			&i.Processed,
+			&i.Room.ID,
+			&i.Room.RoomName,
+		)
+		if err != nil {
+			return reservation, err
+		}
+		reservation = append(reservation, i)
+	}
+	if err = rows.Err(); err != nil {
+		return reservation, err
+	}
+	return reservation, nil
+}
+
+//AllNewReservations gets a slice  of  all the unprocessed reservations for admin use
+func (m *postgresDBRepo) AllNewReservations() ([]models.Reservation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var reservation []models.Reservation
+
+	query := ` 
+		SELECT 
+			r.id, r.first_name, r.last_name, r.phone, r.email, r.start_date, r.end_date, r.room_id,
 			r.created_at, r.updated_at, rm.id, rm.room_name
 		FROM
 			reservations as r
@@ -259,6 +313,8 @@ func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 			rooms as rm 
 		ON 
 			(r.room_id = rm.id) 
+		WHERE
+			r.processed=0
 		ORDER BY
 			r.start_date
 	`
@@ -292,4 +348,113 @@ func (m *postgresDBRepo) AllReservations() ([]models.Reservation, error) {
 		return reservation, err
 	}
 	return reservation, nil
+}
+
+//GetReservationById get one unprocessed reservation by reservation ID
+func (m *postgresDBRepo) GetReservationById(id int) (models.Reservation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	var res models.Reservation
+	query := `
+		SELECT 
+			r.id, r.first_name, r.last_name, r.phone, r.email, r.start_date, r.end_date, r.room_id,
+			r.created_at, r.updated_at, r.processed, rm.id, rm.room_name
+		FROM
+			reservations as r
+		LEFT JOIN
+			rooms as rm 
+		ON 
+			(r.room_id = rm.id) 
+		WHERE
+			r.id = $1
+
+		`
+	row := m.DB.QueryRowContext(ctx, query, id)
+
+	err := row.Scan(
+		&res.ID,
+		&res.FirstName,
+		&res.LastName,
+		&res.Email,
+		&res.Phone,
+		&res.StartDate,
+		&res.EndDate,
+		&res.RoomId,
+		&res.CreatedAt,
+		&res.ModifiedAt,
+		&res.Processed,
+		&res.Room.ID,
+		&res.Room.RoomName,
+	)
+	if err != nil {
+		return res, err
+	}
+	return res, nil
+}
+
+//UpdateReservation updates reservation
+func (m *postgresDBRepo) UpdateReservation(u models.Reservation) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+		UPDATE 
+			reservations
+		SET
+			first_name = $1, last_name = $2, email = $3, phone = $4, updated_at = $5
+		WHERE
+			id = $6
+		`
+
+	_, err := m.DB.ExecContext(ctx, query,
+		u.FirstName,
+		u.LastName,
+		u.Email,
+		u.Phone,
+		time.Now(),
+		u.ID,
+	)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//deletes one reservation by ID
+func (m *postgresDBRepo) DeleteReservation(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+		DELETE FROM
+			reservations
+		WHERE
+			id=$1
+	`
+	_, err := m.DB.ExecContext(ctx, query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//updates one reservation by ID to be processed
+func (m *postgresDBRepo) UpdatePrcessed(id, processed int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+		UPDATE 
+			reservations
+		SET
+			processed= $1
+		WHERE
+			id=$2
+	`
+	_, err := m.DB.ExecContext(ctx, query, processed, id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

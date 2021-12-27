@@ -7,13 +7,16 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/justinas/nosurf"
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
 	"github.com/t-Ikonen/bbbookingsystem/internal/models"
 )
 
-var functions = template.FuncMap{}
+var functions = template.FuncMap{
+	"shortDate": ShortDate,
+}
 
 var appConfig *config.AppConfig
 
@@ -22,6 +25,11 @@ var pathToTemplates = "./templates"
 //NewRender sets the package for the template package
 func NewRenderer(a *config.AppConfig) {
 	appConfig = a
+}
+
+//ShortDate formats long date format to just date without time
+func ShortDate(t time.Time) string {
+	return t.Format("02-01-2006")
 }
 
 //AddDefaultData adds data for all templates

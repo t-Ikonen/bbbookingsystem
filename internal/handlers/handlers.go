@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/t-Ikonen/bbbookingsystem/internal/config"
 	"github.com/t-Ikonen/bbbookingsystem/internal/driver"
 	"github.com/t-Ikonen/bbbookingsystem/internal/forms"
@@ -517,19 +518,29 @@ func (m *Repository) ShowLogout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
-//AdminDashboard show dashboard page for admin only
+//AdminDashboard show dashboard page in admin tool
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, "admindashboard.page.tmpl.html", &models.TemplateData{}, r)
 
 }
 
-//AdminNewReservations show new reservations for admin only
+//AdminNewReservations show new unprocessed reservations in admin tool
 func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, "adminnewreservations.page.tmpl.html", &models.TemplateData{}, r)
+
+	reservations, err := m.DB.AllNewReservations()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data := make(map[string]interface{})
+	data["reservations"] = reservations
+	render.Template(w, "adminnewreservations.page.tmpl.html", &models.TemplateData{
+		Data: data,
+	}, r)
 
 }
 
-//AdminAllReservations show all reservations for admin only
+//AdminAllReservations show all reservations in admin tool
 func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
 	reservations, err := m.DB.AllReservations()
 	if err != nil {
@@ -550,8 +561,87 @@ func (m *Repository) AdminCalendar(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//AdminShowReservation shows one reservation in admin tool for processing
+func (m *Repository) AdminShowReservation(w http.ResponseWriter, r *http.Request) {
+	explode := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(explode[4])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	src := explode[3]
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
+
+	//get reservaton from DB
+	res, err := m.DB.GetReservationById(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["reservation"] = res
+	//fmt.Println(data)
+	render.Template(w, "adminshowreservation.page.tmpl.html", &models.TemplateData{
+		StringMap: stringMap,
+		Data:      data,
+		Form:      forms.New(nil),
+	}, r)
+}
+
+//Save edited reservation in admin mode
+func (m *Repository) AdminPostReservation(w http.ResponseWriter, r *http.Request) {
+
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	explode := strings.Split(r.RequestURI, "/")
+	id, err := strconv.Atoi(explode[4])
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	src := explode[3]
+	stringMap := make(map[string]string)
+	stringMap["src"] = src
+
+	res, err := m.DB.GetReservationById(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.FirstName = r.Form.Get("first_name")
+	res.LastName = r.Form.Get("last_name")
+	res.Email = r.Form.Get("email")
+	res.Phone = r.Form.Get("phone")
+	//fmt.Println("update db alkaa")
+	err = m.DB.UpdateReservation(res)
+	//.Println("update db tehty")
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	m.App.Session.Put(r.Context(), "flash", "Changes saved.")
+	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-%s", src), http.StatusSeeOther)
+}
+
 //AdminStatistics show statistics for admin only
 func (m *Repository) AdminStatistics(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, "statistics.page.tmpl.html", &models.TemplateData{}, r)
+
+}
+
+//AdminProcessReservation marks reservation as processed
+func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(chi.URLParam(r, "id"))
+	src := chi.URLParam(r, "src")
+	_ = m.DB.UpdatePrcessed(id, 1)
+	m.App.Session.Put(r.Context(), "flash", "Reservation marked as processed.")
+	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-%s", src), http.StatusSeeOther)
 
 }
