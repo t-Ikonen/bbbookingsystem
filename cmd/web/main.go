@@ -24,7 +24,7 @@ var session *scs.SessionManager
 var infoLog *log.Logger
 var errorLog *log.Logger
 
-//Main of HelloWeb app
+//Main of B&B app
 func main() {
 
 	db, err := run()
@@ -58,6 +58,7 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Restriction{})
 	gob.Register(models.Room{})
+	gob.Register(map[string]int{})
 
 	mailChan := make(chan models.MailData)
 	appCnf.MailChan = mailChan

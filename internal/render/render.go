@@ -15,19 +15,42 @@ import (
 )
 
 var functions = template.FuncMap{
-	"shortDate": ShortDate,
+	"shortDate":  ShortDate,
+	"formatDate": FormatDate,
+	"iterate":    Iterate,
+	"add":        Add,
 }
 
 var appConfig *config.AppConfig
 
 var pathToTemplates = "./templates"
 
+//fomat time
+func FormatDate(t time.Time, f string) string {
+	return t.Format(f)
+}
+
+//iterate return a slice of ints , starting at 1, going to count
+func Iterate(count int) []int {
+	var i int
+	var items []int
+	for i = 0; i < count; i++ {
+		items = append(items, i)
+	}
+	return items
+}
+
+//adds 2 ints, returns sum
+func Add(a, b int) int {
+	return a + b
+}
+
 //NewRender sets the package for the template package
 func NewRenderer(a *config.AppConfig) {
 	appConfig = a
 }
 
-//ShortDate formats long date format to just date without time
+//ShortDate formats long date format to just date without time aka HumanDate
 func ShortDate(t time.Time) string {
 	return t.Format("02-01-2006")
 }
